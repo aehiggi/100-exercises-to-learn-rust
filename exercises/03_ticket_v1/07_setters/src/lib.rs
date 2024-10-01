@@ -11,21 +11,9 @@ pub struct Ticket {
 
 impl Ticket {
     pub fn new(title: String, description: String, status: String) -> Ticket {
-        if title.is_empty() {
-            panic!("Title cannot be empty");
-        }
-        if title.len() > 50 {
-            panic!("Title cannot be longer than 50 bytes");
-        }
-        if description.is_empty() {
-            panic!("Description cannot be empty");
-        }
-        if description.len() > 500 {
-            panic!("Description cannot be longer than 500 bytes");
-        }
-        if status != "To-Do" && status != "In Progress" && status != "Done" {
-            panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
-        }
+        title_ok(&title);
+        description_ok(&description);
+        status_ok(&status);
 
         Ticket {
             title,
@@ -45,6 +33,48 @@ impl Ticket {
     pub fn status(&self) -> &String {
         &self.status
     }
+
+    pub fn set_title(&mut self, new_title: String) {
+        if title_ok(&new_title) {
+            self.title = new_title
+        }
+    }
+    pub fn set_description(&mut self, new_desc: String) {
+        if description_ok(&new_desc) {
+            self.description = new_desc
+        }
+    }
+    pub fn set_status(&mut self, new_status: String) {
+        if status_ok(&new_status) {
+            self.status = new_status
+        }
+    }
+
+}
+
+fn title_ok(title: &String) -> bool {
+    if title.is_empty() {
+        panic!("Title cannot be empty");
+    }
+    if title.len() > 50 {
+        panic!("Title cannot be longer than 50 bytes");
+    }
+    true
+}
+fn description_ok(description: &String) -> bool {
+    if description.is_empty() {
+        panic!("Description cannot be empty");
+    }
+    if description.len() > 500 {
+        panic!("Description cannot be longer than 500 bytes");
+    }
+    true
+}
+fn status_ok(status: &String) -> bool {
+    if status != "To-Do" && status != "In Progress" && status != "Done" {
+        panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
+    }
+    true
 }
 
 #[cfg(test)]
